@@ -1,15 +1,551 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Project</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Principles and mechanisms of sim-and-real cotraining for diffusion policies.">
+  <meta name="keywords" content="sim-and-real, diffusion, cotraining, co-training">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Empirical Analysis of Sim-and-Real Cotraining for Diffusion Policies</title>
+
+  <!-- Tags for link preview -->
+  <meta property="og:title" content="Empirical Analysis of Sim-and-Real Cotraining for Diffusion Policies" />
+  <meta property="og:description"
+    content="Principles and mechanisms of sim-and-real cotraining for diffusion policies." />
+  <meta property="og:image" content="https://sim-and-real-cotraining.github.io/static/images/anchor.png" />
+  <meta property="og:url" content="https://sim-and-real-cotraining.github.io/" />
+  <meta property="og:type" content="website" />
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  
+  <!-- MathJax -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <h1>An Empirical Analysis of Sim-and-Real Cotraining For Imitation Learning</h1>
-    <p>Work in progress...</p>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://adamwei.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://sim-and-real-cotraining.github.io/"> 
+            Sim-and-Real Cotraining
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <!-- Title -->
+          <h1 class="title is-1 publication-title">Empirical Analysis of Sim-and-Real Cotraining for Diffusion Policies</h1>
+
+          <!-- Authors -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://adamwei.com">Adam Wei</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/abhinavagarwal17">Abhinav Agarwal</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://boyuan.space/">Boyuan Chen</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/rohan-b-92940b201">Rohan Bosworth</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nepfaff.github.io/">Nicholas Pfaff</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://locomotion.csail.mit.edu/russt.html">Russ Tedrake</a><sup>1,2</sup>,
+            </span>
+          </div>
+
+          <!-- Affiliations --> 
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Massachusetts Institute of Technology,</span>
+            <span class="author-block"><sup>2</sup>Toyota Research Institute</span>
+          </div>
+          
+          <!-- Links -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2503.22634"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Data Generation Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/sim-and-real-cotraining/planning-through-contact"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Simulation Code</span>
+                </a>
+              </span>
+              <!-- Training Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/sim-and-real-cotraining/diffusion_policy"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Training Code</span>
+                </a>
+              </span>
+              <!-- Talk + slides Link. -->
+              <span class="link-block">
+                <a href="https://adamwei.com/talk/principles-of-sim-and-real-cotraining-for-robot-manipulation/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-microphone"></i>
+                  </span>
+                  <span>Talk + Slides</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Anchor Figure -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/anchor.png" width="100%">
+      <h2 class="subtitle has-text-centered">
+        <strong>Sim-and-real cotraining</strong> aims to train visuomotor
+        policies using both simulated and real-world robot data to
+        maximize performance on a real-world objective.
+        We use planar pushing from RGB inputs as a canonical test-bed to
+        <strong>study the principles and mechanisms that underly sim-and-real
+        cotraining.</strong>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Real World Experiments -->
+<section class="section">
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <!-- Real Only -->
+      <div class="column">
+        <div class="content has-text-centered">
+          <h3 class="title is-3">Real Only Policy</h3>
+          <p>
+            Policies trained on a limited number of real-world demonstrations 
+            perform poorly.
+          </p>
+          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/10_failure_2x_overlayed.mp4"
+                    type="video/mp4">
+          </video>
+          <h4 class="subtitle is-5">
+            Real demos: 50, Sim demos: 0<br>Success Rate: 50% (10/20)
+          </h4>
+          <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/50_failure_2x_overlayed.mp4"
+                    type="video/mp4">
+          </video>
+          <h4 class="subtitle is-5">
+            Real demos: 10, Sim demos: 0<br>Success Rate: 10% (2/20)
+          </h4>
+        </div>
+      </div>
+      <!--/ Real Only -->
+
+      <!-- Sim+Real Policy -->
+      <div class="column">
+        <div class="content has-text-centered">
+          <h3 class="title is-3">Sim+Real Policy</h3>
+          <p>
+            <em>Cotraining</em> with simulated data drastically improves performance over real-only policies.
+          </p>
+          <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/10_2000_success_2x_overlayed.mp4"
+                    type="video/mp4">
+          </video>
+          <h4 class="subtitle is-5">
+            Real demos: 50, Sim demos: 2000<br>Success Rate: 90% (18/20)
+          </h4>
+          <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/50_2000_success_2x_overlayed.mp4"
+                    type="video/mp4">
+          </video>
+          <h4 class="subtitle is-5">
+            Real demos: 10, Sim demos: 2000<br>Success Rate: 70% (14/20)
+          </h4>
+        </div>
+      </div>
+      <!--/ Sim+Real Policy -->
+    </div>
+    <!--/ Sim+Real Results -->
+  </div>
+</section>
+
+
+<!-- Abstract -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In imitation learning for robotics, <em>cotraining</em> with demonstration data generated both 
+            in simulation and on real hardware has emerged as a promising recipe for scaling imitation 
+            learning in robotics. This work seeks to elucidate basic principles of this 
+            <em>sim-and-real cotraining</em> to inform simulation design, sim-and-real dataset 
+            creation, and policy training.
+          </p>
+          <p>
+            Our experiments confirm that cotraining with simulated data can dramatically improve 
+            performance, especially when real data is limited. We show that these performance 
+            gains scale with additional simulated data up to a plateau; adding more real-world 
+            data increases this performance ceiling. The results also suggest that reducing the 
+            physical domain gaps may be more important than visual fidelity for non-prehensile 
+            manipulation or contact-rich tasks. Perhaps surprisingly, we find that some visual 
+            gap can help cotraining – binary probes reveal that high-performing policies must 
+            learn to distinguish simulated domains from real. We conclude by investigating this 
+            nuance and mechanisms that facilitate positive transfer between sim-and-real.
+          </p>
+          <p>
+            Focusing narrowly on the canonical task of planar pushing from pixels allows us to be 
+            thorough in our study. In total, our experiments span over 50 real-world policies 
+            (evaluated on 1000+ trials) and 250+ simulated policies (evaluated on 50,000+ trials).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Real World Experiments -->
+<section class="section">
+  <h2 class="title is-2 has-text-centered">Real World Experiments</h2>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+    <!-- Sim+Real Results-->
+    <div class="content">
+      <p>
+        We cotrain and evaluate policies with varying amounts of both real and simulated data with different mixing ratios \(\alpha\).
+        We find that cotraining can <strong>improve performance by 2-7x</strong>, but is sensitive to the mixing ratio. 
+        <strong>Scaling up simulated data improves performance</strong> and reduces sensitivity to the mixing ratio.
+      </p>
+      <div class="has-text-centered">
+        <img src="./static/images/real_world_cotraining.png" width="100%">
+      </div>
+    </div>
+    <!--/ Sim+Real Results -->
+  </div>
+</section>
+
+<!-- Simulation Experiments -->
+<section class="section">
+  <h2 class="title is-2 has-text-centered">Simulation Experiments</h2>
+
+  <div class="container is-max-desktop">
+    <div class="content">
+      <p>
+        We scale up our investigation and improve its statistical significance by repeating our real-world experiments in simulation.
+        To emulate sim-and-real cotraining in sim, we create a second <em>target sim</em> environment that 
+        serves as a surrogate to the real-world.
+      </p>
+      <br>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <!-- Sim Data -->
+      <div class="column has-text-centered">
+        <div class="content has-text-centered">
+          <h3 class="title is-3 has-text-centered"><em>Sim</em> Data</h3>
+          <h3 class="subtitle is-5 has-text-centered">&nbsp;</h3>
+          <p class="has-text-centered">
+            <strong>Visuals:</strong> No shadows, white light, incorrect camera extrinsics.<br>
+            <strong>Physics:</strong> Quasistatic dynamics.<br>
+            <strong>Actions:</strong> Optimization-based planner.
+          </p>
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/sim_demo.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Sim Data -->
+
+      <!-- Target Sim Data -->
+      <div class="column has-text-centered">
+        <div class="content has-text-centered">
+          <h3 class="title is-3 has-text-centered"><em>Target Sim</em> Data</h3>
+          <h3 class="subtitle is-5 has-text-centered">(mimics the real-world environment)</h3>
+          <p class="has-text-centered">
+            <strong>Visuals:</strong> Two shadows, 'carbon arc' light.<br>
+            <strong>Physics:</strong> <em>Drake</em>'s physics engine.<br>
+            <strong>Actions:</strong> Human teleoperation.
+          </p>
+          <video autoplay controls muted loop playsinline height="100%" preload="auto">
+            <source src="./static/videos/target_sim_demo.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Target Sim Data -->
+    </div>
+
+    <!-- Sim+Real Results -->
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content has-text-centered">
+          <h3 class="title is-3 has-text-centered">Cotrained Policy (Sim+<em>Target Sim</em>)</h3>
+          <div class="has-text-centered">
+            <iframe src="static/meshcat/sim2sim_50_4000_1_9.html" width="80%" height="400" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <h4 class="subtitle is-5">
+            <em>Target sim</em> demos: 50, Sim demos: 4000<br>Success Rate: 81% (162/200)
+            <p class="is-size-7 has-text-grey mt-2">
+              To increase the speed of the visualization: Open Controls ➜ Animations ➜ default ➜ timeScale
+              <br>
+              Note: the meshcat visualization does not include the shadows, but they are correctly rendered in the camera inputs.
+            </p>
+          </h4>
+
+          <p style="text-align: left;">
+            We find that scaling up simulated data generation improves performance, but this trend eventually plateaus.
+            This suggests that sim data can effectively supplement real data, but cannot replace it; 
+            real data is still needed to increase the cotraining ceiling.
+          </p>
+
+          <div class="has-text-centered">
+            <img src="./static/images/sim_cotraining.png" width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Sim+Real Results -->
+  </div>
+</section>
+
+<!-- Distribution Shifts Experiments -->
+<section class="section">
+  <h2 class="title is-2 has-text-centered">Distribution Shifts Experiments</h2>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <p style="text-align: left;">
+            We also use our simulation to study the following questions about the distributions shifts and sim-and-real cotraining:
+            <ol style="text-align: left;">
+              <li>
+                Which sim2real gaps matter for cotraining? How does this inform simulator design for data generation?
+              </li>
+              <li>
+                What are the best practices for cotraining under different types and magnitudes of distribution shifts?
+              </li>
+            </ol>
+            We introduce 6 different types of distribution shifts (spanning visual, task, and physical gaps)
+            into the sim data at different magnitudes and cotrain policies. Four of the six shifts are visualized below.
+          </p>
+          <div class="has-text-centered">
+            <img src="./static/images/distribution_shifts.png" width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content has-text-centered">
+          <p style="text-align: left;">
+            Overall, larger sim2real gaps along all axis reduce performance. Our results show that:
+            <ul style="text-align: left;">
+              <li>
+                For non-prehensile manipulation tasks, simulated data generation environments should 
+                <strong>match the physics as closely as possible.</strong>
+                This may be less important for more semantic tasks, like pick-and-place.
+              </li>
+              <li>
+                Better rendering increases performance; however, <strong>perfect
+                rendering is unnecessary</strong> (and difficult to achieve).
+              </li>
+              <li>
+                The optimal mixing ratio and the magnitude of the sim2real gaps did not show a clear trend.
+              </li>
+            </ul>
+          </p>
+          <div class="has-text-centered">
+            <img src="./static/images/distribution_shift_results.png" width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Analysis Section -->
+<section class="section">
+  <h2 class="title is-2 has-text-centered">Analysis</h2>
+
+  <div class="container is-max-desktop">
+    <h4 class="title is-4">1. High Performing Policies Distinguish Sim vs Real</h4>
+    <p style="text-align: left;">
+      Binary probing experiments show that high performing policies implicitly discern sim vs real and 
+      adjust their behavior accordingly. We show that this an important mechanism 
+      of sim-and-real cotraining since the different physics of sim and real 
+      require different behaviors and strategies.
+    </p>
+    <br>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="has-text-centered">
+          <img src="./static/images/error_plots.png" width="100%">
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h4 class="title is-4">2. Sim improves data coverage</h4>
+      <p style="text-align: left;">
+        We find that cotraining improves performance by improving data coverage and preventing compounding errors
+        from missing states in the real-world dataset. Interestingly, cotrained policies mostly rely on real data 
+        for action generation and use cotraining data in local neighborhoods where real data is missing.
+        This results in smoother and more robust policies.
+      </p>
+      <div class="has-text-centered" style="margin-top: -1rem;">
+        <video autoplay loop muted playsinline controls width="100%">
+          <source src="./static/videos/knn_animation.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Second analysis section -->
+    <div class="content">
+      <h4 class="title is-4">3. Power Laws</h4>
+      <p style="text-align: left;">
+        Scaling up <em>sim</em> data reduces the test loss and action MSE on the <em>real-world</em> distribution
+        predictably according to a power law. These power laws are evidence of positive transfer 
+        and provide insight into the relative value between sim and real data.
+      </p>
+      <div class="has-text-centered">
+        <img src="./static/images/power_laws.png" width="100%">
+      </div>
+    </div>
+
+    <div class="content">
+      <h4 class="title is-4">4. Ablations</h4>
+      <p style="text-align: left;">
+        We conducted several additional ablation studies, including:
+        <ul style="text-align: left;">
+          <li>Finetuning experiments</li>
+          <li>Domain conditioning via classifier free guidance</li>
+          <li>Adversarial objectives for cotraining <b>[coming soon!]</b></li>
+          <li>Other loss formulations <b>[coming soon!]</b></li>
+        </ul>
+      </p>
+      <p style="text-align: left;">
+        For a comprehensive analysis of all ablation studies, please refer to our 
+        <a href="https://arxiv.org/abs/2503.22634">
+          <span class="icon">
+            <i class="fas fa-file-alt"></i>
+          </span>
+          <span>paper</span>
+        </a>.
+      </p>
+    </div>
+  </div>
+  
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{wei2025simandrealcotraining,
+      title={Empirical Analysis of Sim-and-Real Cotraining Of Diffusion Policies For Planar Pushing from Pixels}, 
+      author={Adam Wei and Abhinav Agarwal and Boyuan Chen and Rohan Bosworth and Nicholas Pfaff and Russ Tedrake},
+      year={2025},
+      eprint={2503.22634},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2503.22634}, 
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          This webpage template is from <a href="https://nerfies.github.io">Nerfies</a>.
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
