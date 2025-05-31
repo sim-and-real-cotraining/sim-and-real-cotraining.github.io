@@ -1,4 +1,4 @@
-# Nerfies
+# Sim-and-Real Cotraining
 
 This is the repository that contains source code for the sim-and-real cotraining website. The code is adopted from the [Nerfies website](https://nerfies.github.io/).
 
