@@ -251,27 +251,26 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            In imitation learning for robotics, <em>cotraining</em> with demonstration data generated both 
-            in simulation and on real hardware has emerged as a promising recipe for scaling imitation 
-            learning in robotics. This work seeks to elucidate basic principles of this 
-            <em>sim-and-real cotraining</em> to inform simulation design, sim-and-real dataset 
-            creation, and policy training.
+            <em>Cotraining</em> with demonstration data generated both in simulation and on real 
+            hardware has emerged as a promising recipe for scaling imitation learning in robotics. 
+            This work seeks to elucidate basic principles of this <em>sim-and-real cotraining</em> 
+            to inform simulation design, sim-and-real dataset creation, and policy training. 
           </p>
           <p>
             Our experiments confirm that cotraining with simulated data can dramatically improve 
-            performance, especially when real data is limited. We show that these performance 
-            gains scale with additional simulated data up to a plateau; adding more real-world 
-            data increases this performance ceiling. The results also suggest that reducing the 
-            physical domain gaps may be more important than visual fidelity for non-prehensile 
-            manipulation or contact-rich tasks. Perhaps surprisingly, we find that some visual 
-            gap can help cotraining – binary probes reveal that high-performing policies must 
-            learn to distinguish simulated domains from real. We conclude by investigating this 
-            nuance and mechanisms that facilitate positive transfer between sim-and-real.
+            performance, especially when real data is limited. We show that these performance gains 
+            scale with additional simulated data up to a plateau; adding more real-world data 
+            increases this performance ceiling. The results also suggest that reducing physical 
+            domain gaps may be more impactful than visual fidelity for non-prehensile or 
+            contact-rich tasks. Perhaps surprisingly, we find that some visual gap can help 
+            cotraining -- binary probes reveal that high-performing policies must learn to 
+            distinguish simulated domains from real. We conclude by investigating this nuance and 
+            mechanisms that facilitate positive transfer between sim-and-real.
           </p>
           <p>
             Focusing narrowly on the canonical task of planar pushing from pixels allows us to be 
-            thorough in our study. In total, our experiments span over 50 real-world policies 
-            (evaluated on 1000+ trials) and 250+ simulated policies (evaluated on 50,000+ trials).
+            thorough in our study. In total, our experiments span 50+ real-world policies (evaluated 
+            on 1000+ trials) and 250 simulated policies (evaluated on 50,000+ trials).
           </p>
         </div>
       </div>
@@ -501,8 +500,7 @@
         <ul style="text-align: left;">
           <li>Finetuning experiments</li>
           <li>Domain conditioning via classifier free guidance</li>
-          <li>Adversarial objectives for cotraining <b>[coming soon!]</b></li>
-          <li>Other loss formulations <b>[coming soon!]</b></li>
+          <li>Alternative formulations for cotraining based on adversarial objectives and the maximum mean discrepancy (MMD) metric</li>
         </ul>
       </p>
       <p style="text-align: left;">
@@ -524,7 +522,7 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{wei2025simandrealcotraining,
-      title={Empirical Analysis of Sim-and-Real Cotraining Of Diffusion Policies For Planar Pushing from Pixels}, 
+      title={Empirical Analysis of Sim-and-Real Cotraining of Diffusion Policies For Planar Pushing from Pixels}, 
       author={Adam Wei and Abhinav Agarwal and Boyuan Chen and Rohan Bosworth and Nicholas Pfaff and Russ Tedrake},
       year={2025},
       eprint={2503.22634},
